@@ -24,6 +24,26 @@ Você pode usar a lista SambaTu com ferramentas comuns de auditoria de senhas co
 hashcat -a 0 -m 1000 arquivo_de_hashes.txt SambaTu/SambaTu.txt
 ```
 
+## Ordenação automática da lista
+
+Um workflow do GitHub Actions ([.github/workflows/sort-wordlist.yml](.github/workflows/sort-wordlist.yml)) reescreve o `SambaTu.txt` automaticamente sempre que ele é alterado na branch `main` (via commit direto ou merge de PR). O arquivo é normalizado, ordenado e deduplicado (`LC_ALL=C sort -u`), facilitando a indexação e a busca programática por terceiros. O job tem `timeout-minutes` tanto no nível do job quanto na etapa de ordenação, e usa `concurrency` para cancelar execuções antigas, evitando consumir minutos além do necessário no plano gratuito.
+
+### Ordenar manualmente
+
+Se preferir rodar a ordenação localmente em vez de esperar pela Action, use o script correspondente ao seu sistema (pasta [scripts/](scripts/)):
+
+```bash
+# Linux
+bash scripts/sort-wordlist.sh
+```
+
+```powershell
+# Windows (PowerShell 5.1 ou 7+)
+./scripts/sort-wordlist.ps1
+```
+
+Ambos aceitam opcionalmente o caminho de outro arquivo como parâmetro e reproduzem a mesma lógica usada na Action (normaliza quebras de linha, remove linhas em branco, ordena e remove duplicatas).
+
 ## Contribuições
 
 Contribuições são bem-vindas para ajudar a expandir e melhorar a lista. Por favor leia o `CONTRIBUTING.md` para saber como ajudar.
@@ -57,6 +77,26 @@ You can use SambaTu with common password cracking tools like John The Ripper or 
 ```bash
 hashcat -a 0 -m 1000 your_hash_file SambaTu/senhas.txt
 ```
+
+## Automatic sorting
+
+A GitHub Actions workflow ([.github/workflows/sort-wordlist.yml](.github/workflows/sort-wordlist.yml)) automatically rewrites `SambaTu.txt` whenever it changes on the `main` branch (direct commit or PR merge). The file is normalized, sorted and deduplicated (`LC_ALL=C sort -u`), making it easier for third-party tools to index and programmatically search. The job sets `timeout-minutes` at both the job and the sorting step level, and uses `concurrency` to cancel stale runs, so it won't burn through the free-tier minutes.
+
+### Sorting manually
+
+If you'd rather sort locally instead of waiting for the Action, use the script for your OS (see the [scripts/](scripts/) folder):
+
+```bash
+# Linux
+bash scripts/sort-wordlist.sh
+```
+
+```powershell
+# Windows (PowerShell 5.1 or 7+)
+./scripts/sort-wordlist.ps1
+```
+
+Both optionally accept another file path as an argument and mirror the same logic used in the Action (normalize line endings, drop blank lines, sort and deduplicate).
 
 ## Contributing
 
